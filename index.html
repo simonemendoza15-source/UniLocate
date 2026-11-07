@@ -1,10 +1,334 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>UniLocate</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UniLocate · ULEAM</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0B4EA2;--blue2:#1769d1;--bg:#F3F5F8;--card:#fff;--ink:#14233b;--mut:#5b6b82;--line:#dbe2ec;--ok:#1b8a4b;--warn:#b7791f;--bad:#c0392b;--soft:#e6eefb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1522;--card:#17212f;--ink:#e8eef8;--mut:#9fb0c7;--line:#2a384c;--soft:#1b2d4a;--blue:#5aa2ff;--blue2:#7db6ff}}
+:root[data-theme="dark"]{--bg:#0e1522;--card:#17212f;--ink:#e8eef8;--mut:#9fb0c7;--line:#2a384c;--soft:#1b2d4a;--blue:#5aa2ff;--blue2:#7db6ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Plus Jakarta Sans",system-ui,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;padding:10px 20px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:20px;color:var(--blue);text-decoration:none;margin-right:auto}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{padding:8px 12px;border-radius:8px;color:var(--ink);text-decoration:none;font-weight:600;font-size:14px}
+nav a[aria-current=page]{background:var(--soft);color:var(--blue)}
+:focus-visible{outline:3px solid var(--blue2);outline-offset:2px}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+.view{display:none}.view.on{display:block;animation:in .25s ease}
+@keyframes in{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+h1{font-size:clamp(40px,8vw,72px);line-height:1;margin:0 0 12px;font-weight:800;color:var(--blue)}
+h2{font-size:28px;margin:0 0 16px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center;padding:30px 0}
+.hero p{font-size:20px;color:var(--mut);margin:0 0 24px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;font-size:34px}
+.tiles span{background:var(--card);border:1px solid var(--line);border-radius:14px;aspect-ratio:1;display:grid;place-items:center}
+.tiles span:nth-child(3n){background:var(--soft)}
+.btn{display:inline-block;border:0;border-radius:10px;padding:12px 18px;font:600 15px inherit;font-family:inherit;cursor:pointer;background:var(--blue);color:#fff;text-decoration:none;transition:background .15s}
+:root[data-theme="dark"] .btn{color:#06121f}
+.btn:hover{background:var(--blue2)}
+.btn.alt{background:var(--soft);color:var(--blue)}
+.btn.sm{padding:7px 12px;font-size:13px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0 24px}
+.stat,.card,form,.panel{background:var(--card);border:1px solid var(--line);border-radius:14px}
+.stat{padding:16px}.stat b{display:block;font-size:30px;color:var(--blue)}.stat small{color:var(--mut)}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+label{display:block;font-weight:600;font-size:13px;margin-bottom:4px}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{overflow:hidden;display:flex;flex-direction:column}
+.ph{height:110px;display:grid;place-items:center;font-size:52px;background:var(--soft)}
+.card img{width:100%;height:110px;object-fit:cover;}
+.card .b{padding:14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.card h3{margin:0;font-size:17px}.card small{color:var(--mut)}
+.tag{align-self:flex-start;font-size:12px;font-weight:600;padding:2px 10px;border-radius:99px;background:var(--soft);color:var(--blue)}
+.tag.Disponible{color:var(--ok)}.tag.Proceso{color:var(--warn)}.tag.Entregado{color:var(--mut)}
+.pager{display:flex;gap:8px;justify-content:center;margin-top:18px;align-items:center}
+form{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:820px}
+form .full{grid-column:1/-1}
+.err{color:var(--bad);font-size:12px;min-height:16px}
+.panel{padding:20px;margin-bottom:16px}
+.map{width:100%;height:240px;border-radius:12px;background:var(--soft)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}
+.scroll{overflow-x:auto}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);max-width:460px;width:92%;padding:20px}
+dialog::backdrop{background:rgba(5,15,35,.5)}
+#toast{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:20}
+#toast div{background:var(--blue);color:#fff;padding:12px 16px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+:root[data-theme="dark"] #toast div{color:#06121f}
+@media(max-width:760px){.hero{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-    <h1>Bienvenido a UniLocate</h1>
+<header>
+<a class="logo" href="#inicio">📍 UniLocate</a>
+<nav id="nav" aria-label="Principal">
+<a href="#inicio">Inicio</a><a href="#catalogo">Catálogo</a><a href="#hallazgo">Reportar hallazgo</a><a href="#perdido">Perdí algo</a><a href="#punto">Punto Seguro</a><a href="#admin">Admin</a>
+</nav>
+<button class="btn alt sm" id="dark" aria-label="Cambiar modo oscuro">🌙 Modo</button>
+</header>
+<main>
+
+<section class="view" id="v-inicio">
+<div class="hero">
+<div>
+<h1>UniLocate</h1>
+<p>Encuentra lo que perdiste, devuelve lo que encontraste.</p>
+<div class="row"><a class="btn" href="#hallazgo">Reportar Objeto Encontrado</a><a class="btn alt" href="#catalogo">Buscar Objeto Perdido</a></div>
+</div>
+<div class="tiles" aria-hidden="true"><span>🪪</span><span>🔑</span><span>🎒</span><span>🧥</span><span>🧴</span><span>📱</span><span>🔌</span><span>💾</span><span>📚</span><span>🧮</span><span>🎧</span><span>📍</span></div>
+</div>
+<div class="stats" id="pubstats"></div>
+<p style="color:var(--mut)">Universidad Laica Eloy Alfaro de Manabí: Recuperación eficiente de objetos perdidos.</p>
+</section>
+
+<section class="view" id="v-catalogo">
+<h2>Objetos encontrados</h2>
+<div class="filters">
+<div><label for="q">Búsqueda</label><input id="q" type="search" placeholder="Ej. mochila azul"></div>
+<div><label for="fc">Categoría</label><select id="fc"></select></div>
+<div><label for="ff">Facultad</label><select id="ff"></select></div>
+<div><label for="fk">Carrera</label><select id="fk"></select></div>
+<div><label for="fb">Bloque</label><select id="fb"></select></div>
+<div><label for="fe">Estado</label><select id="fe"></select></div>
+<div><label for="fd">Desde la fecha</label><input id="fd" type="date"></div>
+</div>
+<div class="grid" id="grid"></div>
+<p id="empty" hidden>No hay objetos con esos filtros. Quita alguno o reporta tu pérdida en «Perdí algo».</p>
+<div class="pager"><button class="btn alt sm" id="pp">Anterior</button><span id="pn"></span><button class="btn alt sm" id="pnx">Siguiente</button></div>
+</section>
+
+<section class="view" id="v-hallazgo">
+<h2>Reportar objeto encontrado</h2>
+<form id="f-found" novalidate>
+<div><label for="a1">Nombre del objeto</label><input id="a1" name="n" required minlength="3"><div class="err"></div></div>
+<div><label for="a2">Categoría</label><select id="a2" name="c" required></select><div class="err"></div></div>
+<div class="full"><label for="a3">Descripción</label><textarea id="a3" name="d" rows="3" required minlength="10"></textarea><div class="err"></div></div>
+<div><label for="a4">Fotografía</label><input id="a4" type="file" accept="image/*"></div>
+<div><label for="a5">Fecha de hallazgo</label><input id="a5" type="date" name="f" required><div class="err"></div></div>
+<div><label for="a6">Facultad</label><select id="a6" name="fa" required></select><div class="err"></div></div>
+<div><label for="a7">Carrera</label><select id="a7" name="ca" required></select><div class="err"></div></div>
+<div><label for="a8">Bloque</label><input id="a8" name="b" required><div class="err"></div></div>
+<div><label for="a9">Aula</label><input id="a9" name="au" required><div class="err"></div></div>
+<div><label for="a10">Nombre de quien encontró</label><input id="a10" name="p" required><div class="err"></div></div>
+<div><label for="a11">Correo institucional</label><input id="a11" type="email" name="e" required pattern=".+@([a-z0-9-]+\.)*uleam\.edu\.ec" placeholder="usuario@uleam.edu.ec"><div class="err"></div></div>
+<div><label for="a12">Teléfono</label><input id="a12" type="tel" name="t" required pattern="0?9[0-9]{8}" placeholder="0991234567"><div class="err"></div></div>
+<div class="full"><button class="btn" type="submit">Publicar hallazgo</button></div>
+</form>
+</section>
+
+<section class="view" id="v-perdido">
+<h2>Reportar objeto perdido</h2>
+<form id="f-lost" novalidate>
+<div><label for="l1">Nombre del estudiante</label><input id="l1" required><div class="err"></div></div>
+<div><label for="l2">Correo institucional</label><input id="l2" type="email" required pattern=".+@([a-z0-9-]+\.)*uleam\.edu\.ec"><div class="err"></div></div>
+<div><label for="l3">Facultad</label><select id="l3" required></select><div class="err"></div></div>
+<div><label for="l4">Carrera</label><select id="l4" required></select><div class="err"></div></div>
+<div><label for="l5">Objeto perdido</label><input id="l5" required><div class="err"></div></div>
+<div><label for="l6">Fecha aproximada de pérdida</label><input id="l6" type="date" required><div class="err"></div></div>
+<div class="full"><label for="l7">Descripción detallada</label><textarea id="l7" rows="3" required minlength="10"></textarea><div class="err"></div></div>
+<div><label for="l8">Lugar aproximado</label><input id="l8" required><div class="err"></div></div>
+<div><label for="l9">Imagen (opcional)</label><input id="l9" type="file" accept="image/*"></div>
+<div class="full"><button class="btn" type="submit">Enviar reporte</button></div>
+</form>
+</section>
+
+<section class="view" id="v-punto">
+<h2>Punto Seguro ULEAM</h2>
+<div class="panel">
+<svg class="map" viewBox="0 0 600 240" role="img" aria-label="Croquis del campus">
+<rect width="600" height="240" fill="none"/>
+<g fill="var(--card)" stroke="var(--line)" stroke-width="2"><rect x="40" y="30" width="150" height="70" rx="8"/><rect x="230" y="30" width="150" height="70" rx="8"/><rect x="420" y="30" width="140" height="70" rx="8"/><rect x="40" y="150" width="150" height="60" rx="8"/><rect x="420" y="150" width="140" height="60" rx="8"/></g>
+<rect x="230" y="150" width="150" height="60" rx="8" fill="var(--blue)"/>
+<text x="305" y="186" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">Punto Seguro</text>
+</svg>
+</div>
+</section>
+
+<section class="view" id="v-admin">
+<div id="login" class="panel" style="max-width:380px">
+<h2>Acceso administrativo</h2>
+<label for="u">Usuario</label><input id="u" autocomplete="username">
+<label for="pw" style="margin-top:10px">Contraseña</label><input id="pw" type="password" autocomplete="current-password">
+<div class="err" id="lerr"></div>
+<button class="btn" id="go">Ingresar</button>
+</div>
+<div id="dash" hidden>
+<h2>Panel administrativo</h2>
+<div class="stats" id="astats"></div>
+<div class="panel scroll"><b>Reclamos pendientes</b>
+<table><thead><tr><th>Objeto</th><th>Solicitante</th><th>Acción</th></tr></thead><tbody id="claims"></tbody></table></div>
+</div>
+</section>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- LÓGICA DE FIREBASE Y CONEXIÓN -->
+<script type="module">
+import { db } from "./firebase-config.js";
+import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const FAC={
+"Facultad de Ingeniería":["Ingeniería en Sistemas","Ingeniería Civil","Ingeniería Industrial"],
+"Facultad de Ciencias Administrativas":["Administración de Empresas","Contabilidad y Auditoría","Marketing"],
+"Facultad de Educación":["Educación Básica","Educación Inicial","Pedagogía de las Ciencias"],
+"Facultad de Ciencias Sociales":["Trabajo Social","Comunicación","Derecho"],
+"Facultad de Salud":["Enfermería","Fisioterapia","Laboratorio Clínico"],
+"Facultad de Ciencias Agropecuarias":["Agronomía","Medicina Veterinaria","Agroindustria"]};
+const CAT={"Credencial":"🪪","Llaves":"🔑","Mochila":"🎒","Suéter":"🧥","Termo":"🧴","Celular":"📱","Cargador":"🔌","Pendrive":"💾","Libro":"📚","Calculadora":"🧮","Audífonos":"🎧"};
+const EST=["Disponible","En proceso de reclamo","Entregado"];
+const BL=["A","B","C","D"];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m){const d=document.createElement("div");d.textContent=m;$("#toast").append(d);setTimeout(()=>d.remove(),3500)}
+
+let items=[]; // Lista vacía que se llenará con tu Firebase
+let claims=[];
+let page=1,PER=6;
+
+// Cargar datos reales desde Firestore al abrir la página
+async function cargarObjetosDeFirebase() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "objetosPerdidos"));
+        items = [];
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            items.push({
+                id: doc.id,
+                nombre: data.nombre,
+                cat: data.cat,
+                fecha: data.fecha,
+                fac: data.fac,
+                car: data.car,
+                bl: data.bl,
+                aula: data.aula,
+                est: data.est || "Disponible",
+                imagen: data.imagen || "" // Recupera la foto en texto Base64
+            });
+        });
+        draw();
+    } catch (error) {
+        console.error("Error al cargar de Firestore:", error);
+    }
+}
+
+// Selects dependientes
+function opts(el,list,first){el.innerHTML=(first?`<option value="">${first}</option>`:"")+list.map(x=>`<option>${esc(x)}</option>`).join("")}
+function dep(fs,cs,first){opts(fs,fk,first);const u=()=>opts(cs,FAC[fs.value]||[],first?"Todas las carreras":"");fs.onchange=u;u()}
+const fk=Object.keys(FAC),ck=Object.keys(CAT);
+dep($("#a6"),$("#a7"));dep($("#l3"),$("#l4"));
+opts($("#a2"),ck);
+opts($("#fc"),ck,"Todas las categorías");opts($("#fb"),BL,"Todos los bloques");opts($("#fe"),EST,"Todos los estados");
+opts($("#ff"),fk,"Todas las facultades");
+$("#ff").onchange=()=>{opts($("#fk"),FAC[$("#ff").value]||[],"Todas las carreras");page=1;draw()};
+opts($("#fk"),[],"Todas las carreras");
+
+// Catálogo y Dibujo en Pantalla
+function filtered(){const q=$("#q").value.trim().toLowerCase();
+return items.filter(o=>(!q||(o.nombre+o.cat+o.fac+o.car+o.aula).toLowerCase().includes(q))
+&&(!$("#fc").value||o.cat===$("#fc").value)&&(!$("#ff").value||o.fac===$("#ff").value)&&(!$("#fk").value||o.car===$("#fk").value)
+&&(!$("#fb").value||o.bl===$("#fb").value)&&(!$("#fe").value||o.est===$("#fe").value)&&(!$("#fd").value||o.fecha>=$("#fd").value))}
+
+function draw(){
+    const l=filtered(),pages=Math.max(1,Math.ceil(l.length/PER));
+    page=Math.min(page,pages);
+    const cur=l.slice((page-1)*PER,page*PER);
+    
+    $("#grid").innerHTML=cur.map(o=>`
+        <article class="card">
+            ${o.imagen ? `<img src="${o.imagen}" alt="Foto del objeto">` : `<div class="ph" aria-hidden="true">${CAT[o.cat]||'📦'}</div>`}
+            <div class="b">
+                <span class="tag ${o.est.split(" ")[0]==="En"?"Proceso":o.est}">${esc(o.est)}</span>
+                <h3>${esc(o.nombre)}</h3>
+                <small>${esc(o.cat)} · ${esc(o.fecha)}</small>
+                <small>${esc(o.fac)}</small><small>${esc(o.car)}</small>
+                <small>Bloque ${esc(o.bl)}, ${esc(o.aula)}</small>
+            </div>
+        </article>
+    `).join("");
+    
+    $("#empty").hidden=l.length>0;
+    $("#pn").textContent=`Página ${page} de ${pages}`;
+    $("#pp").disabled=page<=1;$("#pnx").disabled=page>=pages;stats();
+}
+
+["#q","#fc","#fb","#fe","#fd"].forEach(s=>$(s).addEventListener("input",()=>{page=1;draw()}));
+$("#pp").onclick=()=>{page--;draw()};$("#pnx").onclick=()=>{page++;draw()};
+
+// GUARDAR OBJETO Y FOTO EN FIRESTORE (Convertido a Base64)
+$("#f-found").onsubmit=async (e)=>{
+    e.preventDefault();
+    const f=e.target;
+    
+    const archivoInput = document.getElementById('a4').files[0];
+
+    async function guardar(imagenBase64 = "") {
+        try {
+            const nuevoObjeto = {
+                nombre: $("#a1").value.trim(),
+                cat: $("#a2").value,
+                fecha: $("#a5").value,
+                fac: $("#a6").value,
+                car: $("#a7").value,
+                bl: $("#a8").value.trim(),
+                aula: $("#a9").value.trim(),
+                est: EST[0],
+                imagen: imagenBase64 // Se guarda la foto como texto aquí
+            };
+
+            // Guarda en Firestore (Tu base de datos real)
+            await addDoc(collection(db, "objetosPerdidos"), nuevoObjeto);
+
+            f.reset();
+            dep($("#a6"),$("#a7"));
+            await cargarObjetosDeFirebase(); // Recarga la lista desde Firebase
+            toast("¡Hallazgo publicado y guardado en Firestore!");
+            location.hash="catalogo";
+        } catch (error) {
+            console.error("Error al guardar: ", error);
+            toast("Error al guardar en la base de datos.");
+        }
+    }
+
+    if (archivoInput) {
+        const reader = new FileReader();
+        reader.readAsDataURL(archivoInput);
+        reader.onload = async function () {
+            await guardar(reader.result); // Pasa la imagen en Base64
+        };
+    } else {
+        await guardar("");
+    }
+};
+
+// Estadísticas de la página
+function stats(){
+    const n=items.length,en=items.filter(o=>o.est===EST[2]).length;
+    $("#pubstats").innerHTML=`<div class="stat"><b>${n}</b><small>Objetos registrados</small></div><div class="stat"><b>${en}</b><small>Objetos entregados</small></div><div class="stat"><b>${n-en}</b><small>Esperando a su dueño</small></div>`;
+    $("#astats").innerHTML=`<div class="stat"><b>${n}</b><small>Objetos registrados</small></div><div class="stat"><b>${en}</b><small>Entregados</small></div>`;
+}
+
+// Login admin básico de ejemplo
+$("#go").onclick=()=>{if($("#u").value==="admin"&&$("#pw").value==="unilocate"){$("#login").hidden=true;$("#dash").hidden=false;toast("Sesión iniciada.")}else $("#lerr").textContent="Usuario o contraseña incorrectos."};
+
+// Navegación entre pestañas
+function route(){const h=(location.hash||"#inicio").slice(1);const id=document.getElementById("v-"+h)?h:"inicio";
+document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id==="v-"+id));
+document.querySelectorAll("#nav a").forEach(a=>{if(a.getAttribute("href")==="#"+id)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")})}
+addEventListener("hashchange",route);
+$("#dark").onclick=()=>{const r=document.documentElement,d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=d?"light":"dark"};
+
+// Inicializar la app cargando los datos de Firebase
+route();
+cargarObjetosDeFirebase();
+</script>
 </body>
 </html>
